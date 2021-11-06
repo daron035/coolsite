@@ -2,6 +2,7 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.http.response import Http404, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
+from women.forms import *
 
 from .models import *
 
@@ -26,7 +27,13 @@ def about(request):
     return render(request, 'women/about.html', {'menu': menu, 'title': 'О сайте'})
 
 def addpage(request):
-    return HttpResponse("Добавление статьи")
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = AddPostForm()
+    return render(request, 'women/addpage.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
 
 def contact(request):
     return HttpResponse("Обратная связь")
